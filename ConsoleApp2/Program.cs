@@ -65,64 +65,14 @@ namespace ConsoleApp2
             int car = 0;
             int choosen = 0;
             int host = 0;
+            var range = Enumerable.Range(0, 3);
             for (long i = 0; i < count; i++)
             {
                 car = Helper.random.Next(0, 3); //Выбор двери за которой будет машина
                 choosen = Helper.random.Next(0, 3); //Выбор двери игроком
-                switch (car) //На основании позиции машины и выбора игрока ведущий выбирает какую дверь открыть
-                {
-                    case 0:
-                        if (choosen == 0)
-                            host = Helper.random.Next(1,3);
-                        if (choosen == 1)
-                            host = 2;
-                        if (choosen == 2)
-                            host = 1;
-                        break;
-                    case 1:
-                        if (choosen == 0)
-                            host = 2;
-                        if (choosen == 1)
-                            host = new int[]{0,2}.GetRandom();
-                        if (choosen == 2)
-                            host = 0;
-                        break;
-                    case 2:
-                        if (choosen == 0)
-                            host = 1;
-                        if (choosen == 1)
-                            host = 0;
-                        if (choosen == 2)
-                            host = new int[] { 0, 1 }.GetRandom();
-                        break;
-                    default:
-                        break;
-                }
-                var ch = 0;
-                switch (choosen) // Игрок меняет выбор двери
-                {
-                    case 0:
-                        if (host == 1)
-                            ch = 2;
-                        if (host == 2)
-                            ch = 1;
-                        break;
-                    case 1:
-                        if (host == 0)
-                            ch = 2;
-                        if (host == 2)
-                            ch = 0;
-                        break;
-                    case 2:
-                        if (host == 0)
-                            ch = 1;
-                        if (host == 1)
-                            ch = 0;
-                        break;
-                    default:
-                        break;
-                }
-                if (car == ch)
+                host = range.Where(x => x != car && x != choosen).GetRandom(); // Выбор двери ведущим
+                choosen = range.Where(x => x != host && x != choosen).GetRandom(); // Смена выбора игроком
+                if (car == choosen)
                     good++;
             }
             return ((double)good / count) * 100;
